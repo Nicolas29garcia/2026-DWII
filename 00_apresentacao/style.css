@@ -1,0 +1,105 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo da página */
+body {
+  background-color: #eef2ff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  background-color: #4f46e5;
+  color: white;
+  text-align: center;
+  padding: 32px 16px;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 1.1rem;
+  color: #c7d2fe;
+}
+
+/* Conteúdo principal */
+main {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 0 16px;
+  flex: 1;
+}
+
+/* Imagem */
+.foto-container {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.foto-container img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #4f46e5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Seção de apresentação */
+.apresentacao {
+  background-color: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.apresentacao h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1e1b4b;
+}
+
+.apresentacao p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.apresentacao strong {
+  color: #4f46e5;
+}
+
+/* Footer */
+footer {
+  background-color: #1e293b;
+  color: white;
+  text-align: center;
+  padding: 24px 16px;
+}
+
+footer p {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+footer p:first-child {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+}
