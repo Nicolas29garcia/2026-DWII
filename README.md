@@ -1,29 +1,29 @@
-# Portfólio Acadêmico — Desenvolvimento Web II (DWII)
+# 🎓 Portfólio Acadêmico — Desenvolvimento Web II (DWII)
 
-Mini-site de portfólio desenvolvido durante a disciplina **Desenvolvimento Web II** utilizando **HTML, CSS e PHP**.
+Mini-site de portfólio desenvolvido durante a disciplina **Desenvolvimento Web II**, utilizando **HTML, CSS e PHP**.  
 
-O projeto demonstra conceitos importantes aprendidos em aula, como:
+O projeto demonstra conceitos essenciais aprendidos em aula, incluindo:
 
-- organização de projetos web
-- reutilização de código com **includes**
-- uso de **variáveis PHP**
-- criação de **menus dinâmicos**
-- utilização de **formulários**
-- estruturação de páginas web
-
----
-
-# 👤 Estudante
-
-* **Nome:** Nicolas Henrique Garcia
-* **Curso:** Técnico em Informática Integrado ao Ensino Médio
-* **Turma:** 3º ano
-* **Ano:** 2026
-* **Instituição:** IFPR — Centro de Referência Ponta Grossa
+- Organização de projetos web  
+- Reutilização de código com **includes**  
+- Uso de **variáveis PHP**  
+- Criação de **menus dinâmicos**  
+- Manipulação de **formulários**  
+- Estruturação e estilização de páginas web  
 
 ---
 
-# 📁 Estrutura do Projeto
+## 👤 Estudante
+
+- **Nome:** Nicolas Henrique Garcia  
+- **Curso:** Técnico em Informática Integrado ao Ensino Médio  
+- **Turma:** 3º ano  
+- **Ano:** 2026  
+- **Instituição:** IFPR — Centro de Referência Ponta Grossa  
+
+---
+
+## 📁 Estrutura do Projeto
 
 | Pasta / Arquivo | Conteúdo |
 |-----------------|----------|
@@ -32,11 +32,11 @@ O projeto demonstra conceitos importantes aprendidos em aula, como:
 | `00_apresentacao/index.html` | Página HTML com informações do estudante |
 | `00_apresentacao/style.css` | Estilos da página de apresentação |
 | `00_apresentacao/img/` | Imagens utilizadas na apresentação |
-| `01_php-intro/` | Projeto de portfólio utilizando PHP |
+| `01_php-intro/` | Portfólio desenvolvido em PHP |
 | `01_php-intro/index.php` | Página inicial do portfólio |
 | `01_php-intro/sobre.php` | Página com informações pessoais |
-| `01_php-intro/projetos.php` | Página com projetos desenvolvidos |
-| `01_php-intro/style.css` | Estilos das páginas em PHP |
+| `01_php-intro/projetos.php` | Página listando projetos desenvolvidos |
+| `01_php-intro/style.css` | Estilos das páginas PHP |
 | `01_php-intro/img/` | Imagens utilizadas no portfólio |
 | `01_php-intro/includes/` | Componentes reutilizáveis do site |
 | `01_php-intro/includes/cabecalho.php` | Cabeçalho e estrutura HTML |
@@ -49,9 +49,7 @@ O projeto demonstra conceitos importantes aprendidos em aula, como:
 
 ---
 
-# 🌐 Funcionalidades do Projeto
-
-O site possui as seguintes páginas:
+## 🌐 Funcionalidades
 
 ### 🏠 Início
 Página principal do portfólio com navegação para as demais seções.
@@ -67,19 +65,18 @@ Formulário que permite enviar uma mensagem, exibindo os dados enviados na pági
 
 ---
 
-# 🛠 Tecnologias Utilizadas
+## 🛠 Tecnologias Utilizadas
 
-- **HTML5**
-- **CSS3**
-- **PHP**
-- **Git**
-- **GitHub**
+- **HTML5**  
+- **CSS3**  
+- **PHP**  
+- **Git / GitHub**
 
 ---
 
-# 🚀 Como executar o projeto
+## 🚀 Como executar o projeto
 
 Clone o repositório:
 
 ```bash
-git clone https://github.com/Nicolas29garcia/2026-DWII
+git clone https://github.com/Nicolas29garcia/2026-DWII.git

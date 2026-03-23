@@ -1,114 +1,113 @@
 <?php
+/**
+ * -------------------------------------------------------------
+ * ARQUIVO : 02_formularios/contato.php
+ * Versão : Nicolas - Clean & Secure Form
+ * Conceitos : Validação de e-mail, Array de Erros Nomeado, UX
+ * -------------------------------------------------------------
+ */
 
-$nome = "Nicolas Henrique Garcia";
-$pagina_atual = "contato";
+// — CONFIGURAÇÕES DE AMBIENTE
+$nome_dev = "Nicolas";
+$titulo_pagina = "Contato | Dev Space";
 $caminho_raiz = "../";
-$titulo_pagina = "Contato – {$nome}";
 
+// — ESTADO DOS CAMPOS
+$dados = [
+    'nome' => '',
+    'email' => '',
+    'mensagem' => ''
+];
+$erros = [];
+
+// — PROCESSAMENTO DO FORMULÁRIO
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    // Sanitização básica
+    foreach ($dados as $campo => $valor) {
+        $dados[$campo] = trim($_POST[$campo] ?? '');
+    }
+
+    // VALIDAÇÕES ESPECÍFICAS
+    if (empty($dados['nome'])) {
+        $erros['nome'] = "Identifique-se, por favor.";
+    }
+
+    if (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
+        $erros['email'] = "O e-mail informado não parece válido.";
+    }
+
+    if (strlen($dados['mensagem']) < 15) {
+        $erros['mensagem'] = "Seja mais específico (mínimo 15 caracteres).";
+    }
+
+    // SE ESTIVER TUDO OK -> REDIRECIONA (PRG Pattern)
+    if (empty($erros)) {
+        $query = http_build_query(['status' => 'success', 'user' => $dados['nome']]);
+        header("Location: obrigado.php?$query");
+        exit;
+    }
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-BR">
+<?php include '../includes/cabecalho.php'; ?>
 
-<head>
-
-<?php include "../includes/cabecalho.php"; ?>
 <style>
+    .form-box { max-width: 500px; margin: 40px auto; font-family: 'Inter', sans-serif; }
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #334155; }
+    
+    .input-group input, .input-group textarea {
+        width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px;
+        transition: border-color 0.2s; font-size: 1rem;
+    }
 
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#0f172a,#1e293b);
-color:white;
-min-height:100vh;
-}
-
-.container{
-max-width:900px;
-margin:auto;
-padding:40px;
-}
-
-form{
-background:#1e293b;
-padding:25px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-}
-
-label{
-font-weight:bold;
-}
-
-input, textarea{
-width:100%;
-padding:12px;
-margin-top:6px;
-border-radius:6px;
-border:none;
-background:#0f172a;
-color:white;
-}
-
-textarea{
-resize:vertical;
-}
-
-button{
-background:#38bdf8;
-color:white;
-border:none;
-padding:12px 20px;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
-}
-
-button:hover{
-background:#0ea5e9;
-transform:scale(1.05);
-}
-
-h1{
-color:#38bdf8;
-}
-
+    .input-group input:focus { border-color: #10b981; outline: none; }
+    .error-msg { color: #ef4444; font-size: 0.85rem; margin-top: 5px; }
+    
+    .btn-send {
+        background: #10b981; color: white; border: none; padding: 12px 24px;
+        border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;
+        transition: background 0.2s;
+    }
+    .btn-send:hover { background: #059669; }
 </style>
 
-</head>
-
-<body>
-
 <div class="container">
+    <div class="form-box">
+        <h1 style="margin-bottom: 10px;">📩 Enviar Mensagem</h1>
+        <p style="color: #64748b; margin-bottom: 30px;">Dúvidas ou feedbacks? Manda um sinal.</p>
 
-<h1>Contato</h1>
+        <form action="contato.php" method="POST" novalidate>
+            
+            <div class="input-group">
+                <label>Seu Nome</label>
+                <input type="text" name="nome" value="<?= htmlspecialchars($dados['nome']) ?>" placeholder="Ex: Nicolas Silva">
+                <?php if (isset($erros['nome'])): ?>
+                    <p class="error-msg"><?= $erros['nome'] ?></p>
+                <?php endif; ?>
+            </div>
 
-<p>Entre em contato comigo através do formulário abaixo.</p>
+            <div class="input-group">
+                <label>E-mail Profissional</label>
+                <input type="email" name="email" value="<?= htmlspecialchars($dados['email']) ?>" placeholder="nicolas@exemplo.com">
+                <?php if (isset($erros['email'])): ?>
+                    <p class="error-msg"><?= $erros['email'] ?></p>
+                <?php endif; ?>
+            </div>
 
-<form action="obrigado.php" method="POST">
+            <div class="input-group">
+                <label>Sua Mensagem</label>
+                <textarea name="mensagem" rows="4" placeholder="Como posso ajudar?"><?= htmlspecialchars($dados['mensagem']) ?></textarea>
+                <?php if (isset($erros['mensagem'])): ?>
+                    <p class="error-msg"><?= $erros['mensagem'] ?></p>
+                <?php endif; ?>
+            </div>
 
-<label>Nome</label>
-<input type="text" name="nome" required>
+            <button type="submit" class="btn-send">Disparar Mensagem →</button>
 
-<br><br>
-
-<label>Email</label>
-<input type="email" name="email" required>
-
-<br><br>
-
-<label>Mensagem</label>
-<textarea name="mensagem" rows="5" required></textarea>
-
-<br><br>
-
-<button type="submit">Enviar</button>
-
-</form>
-
+        </form>
+    </div>
 </div>
 
-<?php include "../includes/rodape.php"; ?>
-
-</body>
-</html>
+<?php include '../includes/rodape.php'; ?>

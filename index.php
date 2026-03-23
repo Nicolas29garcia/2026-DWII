@@ -1,137 +1,156 @@
 <?php
-$nome = "Nicolas Henrique";
-$curso = "Técnico em Informática";
-$instituicao = "IFPR";
+/**
+ * ARQUIVO: index.php (RAIZ DO REPOSITÓRIO)
+ * Versão Final: Nicolas - System Hub 2026
+ * Correção: Links exatos para arquivos específicos (contato.php, login.php, etc.)
+ */
 
-$paginas = [
-[
-"titulo" => "Início",
-"descricao" => "Página principal do meu portfólio acadêmico.",
-"link" => "01_php-intro/index.php",
-"icone" => "🏠",
-"cor" => "#38bdf8"
-],
-[
-"titulo" => "Sobre",
-"descricao" => "Conheça mais sobre mim, minha formação e objetivos.",
-"link" => "01_php-intro/sobre.php",
-"icone" => "👤",
-"cor" => "#a855f7"
-],
-[
-"titulo" => "Projetos",
-"descricao" => "Projetos envolvendo desenvolvimento de bots para Discord e automação.",
-"link" => "01_php-intro/projetos.php",
-"icone" => "🤖",
-"cor" => "#22c55e"
-],
-[
-"titulo" => "Contato",
-"descricao" => "Formulário para entrar em contato comigo.",
-"link" => "02_formularios/contato.php",
-"icone" => "✉️",
-"cor" => "#f59e0b"
-]
+// 1. Resolve o caminho base para evitar erros de 404 e pastas repetidas
+$base_url = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\') . '/';
+
+$usuario = "Nicolas";
+$projeto = "Desenvolvimento Web II // 2026";
+
+// 2. MAPA DE ARQUIVOS (Certifique-se que os nomes batem com suas pastas)
+$modulos = [
+    [
+        "id" => "00", 
+        "titulo" => "Apresentação Pessoal", 
+        "tag" => "HTML/CSS", 
+        "arquivo" => "00_apresentacao/index.html"
+    ],
+    [
+        "id" => "01", 
+        "titulo" => "Portfólio Dinâmico", 
+        "tag" => "PHP Intro", 
+        "arquivo" => "01_php-intro/index.php"
+    ],
+    [
+        "id" => "04", 
+        "titulo" => "Formulários e Filtros", 
+        "tag" => "Segurança", 
+        "arquivo" => "02_formularios/contato.php" // CORRIGIDO: de index para contato
+    ],
+    [
+        "id" => "05", 
+        "titulo" => "Integração com Banco", 
+        "tag" => "Database", 
+        "arquivo" => "03_pdo/index.php"
+    ],
+    [
+        "id" => "06", 
+        "titulo" => "Gestão de Sessões", 
+        "tag" => "Auth", 
+        "arquivo" => "04_sessoes/login.php" // CORRIGIDO: apontando para o login
+    ],
 ];
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Portfólio — <?php echo $nome; ?></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub // <?= $usuario ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --bg: #f1f5f9;
+            --text: #0f172a;
+            --border: #e2e8f0;
+        }
 
-<style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#0f172a,#1e293b);
-color:white;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 40px 20px;
+        }
 
-.container{
-max-width:1100px;
-margin:auto;
-padding:40px;
-}
+        .wrapper { max-width: 600px; margin: 0 auto; }
 
-h1{
-color:#38bdf8;
-}
+        header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-margin-top:30px;
-}
+        header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
+        header p { color: #64748b; font-weight: 500; }
 
-.card{
-background:#1e293b;
-padding:25px;
-border-radius:12px;
-text-decoration:none;
-color:white;
-box-shadow:0 0 20px rgba(0,0,0,0.4);
-border-left:5px solid;
-transition:0.2s;
-}
+        .lista { display: grid; gap: 15px; }
 
-.card:hover{
-transform:translateY(-5px);
-}
+        .card {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
 
-.icon{
-font-size:28px;
-margin-bottom:10px;
-}
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateX(8px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
 
-.card h3{
-margin:0;
-}
+        .badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            background: #ecfdf5;
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
 
-.card p{
-font-size:14px;
-opacity:0.8;
-}
+        .card h3 { margin: 5px 0; font-size: 1.1rem; }
+        .tag { font-size: 0.8rem; color: #94a3b8; font-family: monospace; }
 
-</style>
+        .seta { font-weight: bold; color: var(--primary); opacity: 0; transition: 0.2s; }
+        .card:hover .seta { opacity: 1; }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
+    <div class="wrapper">
+        <header>
+            <h1><?= $usuario ?></h1>
+            <p><?= $projeto ?></p>
+        </header>
 
-<h1>Portfólio de <?php echo $nome; ?></h1>
+        <nav class="lista">
+            <?php foreach ($modulos as $m): ?>
+            <a href="<?= $base_url . $m['arquivo'] ?>" class="card">
+                <div>
+                    <span class="badge">Aula <?= $m['id'] ?></span>
+                    <h3><?= htmlspecialchars($m['titulo']) ?></h3>
+                    <span class="tag">#<?= $m['tag'] ?></span>
+                </div>
+                <div class="seta">ABRIR →</div>
+            </a>
+            <?php endforeach; ?>
+        </nav>
 
-<p>
-Estudante de <strong><?php echo $curso; ?></strong> no
-<strong><?php echo $instituicao; ?></strong>.
-Desenvolvedor de bots para Discord e entusiasta de automação de sistemas.
-</p>
-
-<div class="grid">
-
-<?php foreach($paginas as $pagina): ?>
-
-<a class="card"
-href="<?php echo $pagina['link']; ?>"
-style="border-left-color: <?php echo $pagina['cor']; ?>">
-
-<div class="icon"><?php echo $pagina['icone']; ?></div>
-
-<h3><?php echo $pagina['titulo']; ?></h3>
-
-<p><?php echo $pagina['descricao']; ?></p>
-
-</a>
-
-<?php endforeach; ?>
-
-</div>
-
-</div>
+        <footer>
+            IFPR - Campus Ponta Grossa | <?= date("Y") ?>
+        </footer>
+    </div>
 
 </body>
 </html>

@@ -1,116 +1,100 @@
 <?php
+/**
+ * -------------------------------------------------------------
+ * ARQUIVO : 02_formularios/obrigado.php
+ * Versão : Nicolas - Confirmação de Protocolo
+ * Conceitos : Extração de GET, Fallback de segurança, UI Moderna
+ * -------------------------------------------------------------
+ */
 
-$nome = "Nicolas Henrique Garcia";
-$pagina_atual = "contato";
+// — CONFIGURAÇÕES DE AMBIENTE
+$nome_dev = "Nicolas";
+$titulo_pagina = "Mensagem Recebida!";
 $caminho_raiz = "../";
-$titulo_pagina = "Mensagem enviada – {$nome}";
 
-$nome_form = $_POST["nome"] ?? "";
-$email = $_POST["email"] ?? "";
-$mensagem = $_POST["mensagem"] ?? "";
+// Captura o nome com fallback para 'Visitante'
+// Nota: 'user' é o parâmetro que definimos no redirecionamento do contato.php
+$usuario_msg = htmlspecialchars($_GET['user'] ?? 'Visitante');
+$status = $_GET['status'] ?? '';
 
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-
-<?php include "../includes/cabecalho.php"; ?>
+<?php include '../includes/cabecalho.php'; ?>
 
 <style>
+    .success-wrapper {
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', sans-serif;
+    }
 
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:linear-gradient(135deg,#0f172a,#1e293b);
-color:white;
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-}
+    .success-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 40px;
+        max-width: 450px;
+        text-align: center;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        animation: slideUp 0.5s ease-out;
+    }
 
-.container{
-max-width:700px;
-width:100%;
-padding:40px;
-}
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-.resultado{
-background:#1e293b;
-padding:35px;
-border-radius:14px;
-box-shadow:0 15px 40px rgba(0,0,0,0.5);
-border-left:6px solid #22c55e;
-animation:fade 0.5s ease;
-}
+    .icon-circle {
+        width: 64px;
+        height: 64px;
+        background: #ecfdf5;
+        color: #10b981;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 20px;
+    }
 
-h1{
-color:#22c55e;
-margin-top:0;
-}
+    .success-card h2 { color: #1e293b; margin-bottom: 10px; font-weight: 700; }
+    .success-card p { color: #64748b; margin-bottom: 30px; line-height: 1.6; }
 
-p{
-line-height:1.6;
-}
+    .actions { display: flex; flex-direction: column; gap: 10px; }
 
-.voltar{
-display:inline-block;
-margin-top:20px;
-background:#38bdf8;
-color:white;
-padding:12px 22px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-transition:0.2s;
-}
+    .btn-primary {
+        background: #10b981; color: white; text-decoration: none;
+        padding: 12px; border-radius: 8px; font-weight: 600;
+        transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #059669; }
 
-.voltar:hover{
-background:#0ea5e9;
-transform:translateY(-2px);
-box-shadow:0 5px 15px rgba(0,0,0,0.3);
-}
-
-@keyframes fade{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
+    .btn-secondary {
+        background: transparent; color: #64748b; text-decoration: none;
+        padding: 12px; border-radius: 8px; font-size: 0.9rem;
+        border: 1px solid #e2e8f0; transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: #f8fafc; color: #1e293b; }
 </style>
 
-</head>
+<div class="success-wrapper">
+    <div class="success-card">
+        <div class="icon-circle">✓</div>
+        
+        <h2>Tudo certo, <?= $usuario_msg ?>!</h2>
+        
+        <p>
+            Sua mensagem foi protocolada com sucesso em nosso sistema. 
+            Vou analisar os dados e retorno em breve no seu e-mail.
+        </p>
 
-<body>
-
-<div class="container">
-
-<h1>Mensagem enviada!</h1>
-
-<div class="resultado">
-
-<p><strong>Nome:</strong> <?php echo htmlspecialchars($nome_form); ?></p>
-
-<p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-
-<p><strong>Mensagem:</strong></p>
-
-<p><?php echo nl2br(htmlspecialchars($mensagem)); ?></p>
-
-<a class="voltar" href="contato.php">Voltar</a>
-
+        <div class="actions">
+            <a href="../index.php" class="btn-primary">Voltar ao Painel Principal</a>
+            <a href="contato.php" class="btn-secondary">Enviar outra mensagem</a>
+        </div>
+    </div>
 </div>
 
-</div>
-
-<?php include "../includes/rodape.php"; ?>
-
-</body>
-</html>
+<?php include '../includes/rodape.php'; ?>
