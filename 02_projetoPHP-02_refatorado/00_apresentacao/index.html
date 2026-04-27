@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Aluno | Nicolas Henrique</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Estilos específicos apenas para a página de Bio (Foto e Layout) */
+        .perfil-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .foto-container {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .foto-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-aluno {
+            background: var(--primary-light);
+            padding: 15px;
+            border-radius: var(--radius);
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 600;
+            color: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="../index.php" class="nav-logo">
+                <i class="fa-solid fa-terminal"></i> NICOLAS
+            </a>
+            <ul class="nav-links">
+                <li><a href="../index.php">Hub</a></li>
+                <li><a href="index.html" class="active">Bio</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="section-card">
+            <div class="perfil-header">
+                <div class="foto-container">
+                    <img src="img/nicolas.jpg" alt="Foto de Nicolas Henrique">
+                </div>
+                <h1>Nicolas Henrique</h1>
+                <div class="info-aluno">
+                    <i class="fa-solid fa-graduation-cap"></i> Informática 3º Ano &bull; IFPR
+                </div>
+            </div>
+
+            <article class="apresentacao">
+                <h2><i class="fa-solid fa-user-astronaut"></i> Sobre Mim</h2>
+                <p>
+                    Olá! Tenho <strong>17 anos</strong> e sou estudante do 
+                    <strong>Curso Técnico em Informática</strong>. 
+                    Atualmente estou no <strong>3º ano</strong> e estudo no campus de 
+                    <strong>Ponta Grossa</strong>.
+                </p>
+                <p>
+                    Sou apaixonado por tecnologia e estou sempre buscando aprender coisas novas
+                    na área de desenvolvimento. Esta página foi criada como atividade da
+                    disciplina de Desenvolvimento Web.
+                </p>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p><strong>Nicolas Henrique</strong> &copy; 2026</p>
+        <p>IFPR - Campus Ponta Grossa</p>
+    </footer>
+
+</body>
+</html>

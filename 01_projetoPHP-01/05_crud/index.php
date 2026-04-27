@@ -3,10 +3,6 @@
  * Disciplina : Desenvolvimento Web II (DWII)
  * Aula       : 07 — CRUD: Create e Read
  * Arquivo    : 05_crud/index.php
- * Autor      : [SEU NOME AQUI]
- * Data       : [DATA DE HOJE]
- * Descrição  : Lista todos os projetos cadastrados no banco
- * (Read)
  */
 
 // --- Proteção: apenas usuários autenticados ---
@@ -16,12 +12,11 @@ requer_login();
 // --- Dependências ---
 require_once __DIR__ . '/includes/conexao.php';
 
-// --- Busca todos os projetos ordenados pelo mais recente ---
+// --- Busca ---
 $pdo = conectar();
 $stmt = $pdo->query('SELECT * FROM projetos ORDER BY criado_em DESC');
 $projetos = $stmt->fetchAll();
 
-// --- Mensagem de sucesso após cadastro ---
 $cadastroOk = isset($_GET['cadastro']) && $_GET['cadastro'] === 'ok';
 
 $titulo_pagina = 'Meus Projetos — Portfólio';
@@ -31,15 +26,115 @@ $pagina_atual  = '';
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <?php require_once __DIR__ . '/../includes/cabecalho.php'; ?>
+<?php require_once __DIR__ . '/../includes/cabecalho.php'; ?>
+
+<style>
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* TÍTULO */
+.titulo-secao {
+    font-size: 26px;
+    color: #3b579d;
+}
+
+/* CARD */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+/* BOTÕES */
+.btn-primario {
+    background: #3b579d;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-primario:hover {
+    background: #2f447a;
+}
+
+.btn-secundario {
+    display: inline-block;
+    margin-top: 10px;
+    background: #e5e7eb;
+    color: #111827;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.btn-secundario:hover {
+    background: #d1d5db;
+}
+
+/* ALERTA */
+.alerta-sucesso {
+    background: #dcfce7;
+    border: 1px solid #22c55e;
+    color: #166534;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 600px) {
+    .titulo-secao {
+        font-size: 20px;
+    }
+}
+
+</style>
+
 </head>
 <body>
 
 <div class="container">
 
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
-        <h1 class="titulo-secao" style="margin: 0;">📂 Meus Projetos</h1>
-        <a href="cadastrar.php" class="btn-primario">➕ Novo Projeto</a>
+        <h1 class="titulo-secao">📂 Meus Projetos</h1>
+
+        <!-- ✅ CORRIGIDO AQUI -->
+        <a href="/05_crud/cadastrar.php" class="btn-primario">➕ Novo Projeto</a>
     </div>
 
     <?php if ($cadastroOk): ?>
@@ -52,11 +147,13 @@ $pagina_atual  = '';
         <div class="card" style="text-align: center; padding: 40px 20px; color: #6b7280;">
             <p style="font-size: 40px; margin: 0 0 12px;">📁</p>
             <p style="font-size: 16px; margin: 0 0 16px;">Nenhum projeto cadastrado ainda.</p>
-            <a href="cadastrar.php" class="btn-primario">➕ Cadastrar o primeiro projeto</a>
+
+            <!-- ✅ CORRIGIDO AQUI -->
+            <a href="/05_crud/cadastrar.php" class="btn-primario">➕ Cadastrar o primeiro projeto</a>
         </div>
 
     <?php else: ?>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+        <div class="grid">
             <?php foreach ($projetos as $projeto): ?>
                 <div class="card">
                     <h3 style="margin: 0 0 8px; color: #3b579d; font-size: 17px;">
