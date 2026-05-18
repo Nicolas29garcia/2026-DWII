@@ -1,96 +1,284 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Aluno | Nicolas Henrique</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="style.css">
+<?php
+/**
+ * ════════════════════════════════════════════════════════════
+ * Disciplina : Desenvolvimento Web II (DWII)
+ * Projeto    : System Hub
+ * Arquivo    : 00_apresentacao/index.php
+ * Autor      : Nicolas Henrique
+ * Data       : [DATA DE HOJE]
+ * Descrição  : Página de apresentação pessoal do aluno.
+ * ════════════════════════════════════════════════════════════
+ */
 
-    <style>
-        /* Estilos específicos apenas para a página de Bio (Foto e Layout) */
-        .perfil-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+// ── Variáveis do template ──────────────────────────────────
+$titulo_pagina = 'Perfil do Aluno | Nicolas Henrique';
+$pagina_atual  = 'bio';
+$caminho_raiz  = '../';
+$nome_dev      = 'NICOLAS';
 
-        .foto-container {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid var(--primary);
-            box-shadow: var(--shadow);
-        }
+// ── Cabeçalho global ───────────────────────────────────────
+require_once __DIR__ . '/../includes/cabecalho.php';
+?>
 
-        .foto-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+<style>
 
-        .info-aluno {
-            background: var(--primary-light);
-            padding: 15px;
-            border-radius: var(--radius);
-            display: inline-block;
-            margin-top: 10px;
-            font-weight: 600;
-            color: var(--primary-hover);
-        }
-    </style>
-</head>
-<body>
+    /* ───────────────────────────────────────────────────────
+       Card principal da BIO
+    ─────────────────────────────────────────────────────── */
 
-    <nav class="main-nav">
-        <div class="nav-container">
-            <a href="../index.php" class="nav-logo">
-                <i class="fa-solid fa-terminal"></i> NICOLAS
-            </a>
-            <ul class="nav-links">
-                <li><a href="../index.php">Hub</a></li>
-                <li><a href="index.html" class="active">Bio</a></li>
-            </ul>
+    .bio-card{
+        background:#ffffff;
+        border:1px solid #e5e7eb;
+        border-radius:24px;
+        padding:35px;
+        margin-top:35px;
+
+        box-shadow:0 20px 50px rgba(15,23,42,0.08);
+    }
+
+    /* ───────────────────────────────────────────────────────
+       Cabeçalho do perfil
+    ─────────────────────────────────────────────────────── */
+
+    .perfil-header{
+        text-align:center;
+        margin-bottom:30px;
+    }
+
+    /* ───────────────────────────────────────────────────────
+       Container da foto
+    ─────────────────────────────────────────────────────── */
+
+    .foto-container{
+        width:170px;
+        height:170px;
+
+        margin:0 auto 20px;
+
+        border-radius:50%;
+        overflow:hidden;
+
+        border:4px solid #2563eb;
+
+        box-shadow:0 15px 35px rgba(37,99,235,0.25);
+    }
+
+    .foto-container img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+    }
+
+    /* ───────────────────────────────────────────────────────
+       Nome principal
+    ─────────────────────────────────────────────────────── */
+
+    .perfil-header h1{
+        font-size:2.2rem;
+        color:#0f172a;
+
+        margin-bottom:10px;
+    }
+
+    /* ───────────────────────────────────────────────────────
+       Badge do curso
+    ─────────────────────────────────────────────────────── */
+
+    .info-aluno{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+
+        background:#dbeafe;
+        color:#1d4ed8;
+
+        padding:9px 16px;
+
+        border-radius:999px;
+
+        font-weight:700;
+        font-size:0.9rem;
+    }
+
+    /* ───────────────────────────────────────────────────────
+       Texto apresentação
+    ─────────────────────────────────────────────────────── */
+
+    .apresentacao h2{
+        color:#0f172a;
+        margin-bottom:15px;
+    }
+
+    .apresentacao p{
+        color:#475569;
+        line-height:1.7;
+
+        margin-bottom:14px;
+    }
+
+    /* ───────────────────────────────────────────────────────
+       Tags tecnologias
+    ─────────────────────────────────────────────────────── */
+
+    .tags{
+        display:flex;
+        justify-content:center;
+        flex-wrap:wrap;
+
+        gap:10px;
+
+        margin-top:25px;
+    }
+
+    .tag{
+        background:#f1f5f9;
+        color:#334155;
+
+        border:1px solid #e2e8f0;
+
+        padding:8px 14px;
+
+        border-radius:999px;
+
+        font-weight:700;
+        font-size:0.85rem;
+    }
+
+    /* ───────────────────────────────────────────────────────
+       Área botão voltar
+    ─────────────────────────────────────────────────────── */
+
+    .bio-acoes{
+        text-align:center;
+        margin-top:30px;
+    }
+
+    /* ───────────────────────────────────────────────────────
+       Botão principal
+    ─────────────────────────────────────────────────────── */
+
+    .btn-bio{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+
+        background:#2563eb;
+        color:#ffffff;
+
+        text-decoration:none;
+
+        padding:13px 20px;
+
+        border-radius:14px;
+
+        font-weight:800;
+
+        transition:0.25s;
+    }
+
+    .btn-bio:hover{
+        background:#1d4ed8;
+        transform:translateY(-2px);
+    }
+
+</style>
+
+<!-- ───────────────────────────────────────────────────────
+     Card principal
+─────────────────────────────────────────────────────── -->
+
+<section class="bio-card">
+
+    <!-- ── Cabeçalho perfil ────────────────────────────── -->
+    <div class="perfil-header">
+
+        <!-- Foto -->
+        <div class="foto-container">
+
+            <img src="../imgs/henry.jpg"
+                 alt="Foto de Nicolas Henrique">
+
         </div>
-    </nav>
 
-    <main class="container">
-        <section class="section-card">
-            <div class="perfil-header">
-                <div class="foto-container">
-                    <img src="img/nicolas.jpg" alt="Foto de Nicolas Henrique">
-                </div>
-                <h1>Nicolas Henrique</h1>
-                <div class="info-aluno">
-                    <i class="fa-solid fa-graduation-cap"></i> Informática 3º Ano &bull; IFPR
-                </div>
-            </div>
+        <!-- Nome -->
+        <h1>
+            Nicolas Henrique
+        </h1>
 
-            <article class="apresentacao">
-                <h2><i class="fa-solid fa-user-astronaut"></i> Sobre Mim</h2>
-                <p>
-                    Olá! Tenho <strong>17 anos</strong> e sou estudante do 
-                    <strong>Curso Técnico em Informática</strong>. 
-                    Atualmente estou no <strong>3º ano</strong> e estudo no campus de 
-                    <strong>Ponta Grossa</strong>.
-                </p>
-                <p>
-                    Sou apaixonado por tecnologia e estou sempre buscando aprender coisas novas
-                    na área de desenvolvimento. Esta página foi criada como atividade da
-                    disciplina de Desenvolvimento Web.
-                </p>
-            </article>
-        </section>
-    </main>
+        <!-- Curso -->
+        <div class="info-aluno">
 
-    <footer>
-        <p><strong>Nicolas Henrique</strong> &copy; 2026</p>
-        <p>IFPR - Campus Ponta Grossa</p>
-    </footer>
+            <i class="fa-solid fa-graduation-cap"></i>
 
-</body>
-</html>
+            Informática 3º Ano • IFPR
+
+        </div>
+
+    </div>
+
+    <!-- ── Sobre mim ───────────────────────────────────── -->
+    <article class="apresentacao">
+
+        <h2>
+
+            <i class="fa-solid fa-user"></i>
+
+            Sobre mim
+
+        </h2>
+
+        <p>
+            Olá! Meu nome é <strong>Nicolas Henrique</strong>,
+            tenho <strong>17 anos</strong> e sou estudante do
+            <strong>Curso Técnico em Informática</strong>.
+        </p>
+
+        <p>
+            Atualmente estou no <strong>3º ano</strong>
+            no IFPR Campus Ponta Grossa.
+            Tenho interesse em tecnologia, programação,
+            desenvolvimento web e criação de sistemas.
+        </p>
+
+        <p>
+            Esta página foi desenvolvida como parte das
+            atividades da disciplina de
+            <strong>Desenvolvimento Web II</strong>.
+        </p>
+
+    </article>
+
+    <!-- ── Tags tecnologias ────────────────────────────── -->
+    <div class="tags">
+
+        <span class="tag">HTML5</span>
+
+        <span class="tag">CSS3</span>
+
+        <span class="tag">PHP</span>
+
+        <span class="tag">IFPR</span>
+
+    </div>
+
+</section>
+
+<!-- ───────────────────────────────────────────────────────
+     Botão voltar
+─────────────────────────────────────────────────────── -->
+
+<div class="bio-acoes">
+
+    <a href="../index.php"
+       class="btn-bio">
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Voltar ao Hub
+
+    </a>
+
+</div>
+
+<!-- ── Rodapé global ────────────────────────────────────── -->
+<?php require_once __DIR__ . '/../includes/rodape.php'; ?>

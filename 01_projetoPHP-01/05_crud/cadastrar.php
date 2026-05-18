@@ -1,21 +1,19 @@
 <?php
 /**
  * Disciplina : Desenvolvimento Web II (DWII)
- * Aula       : 07 – CRUD: Create e Read
+ * Aula       : 07 — CRUD: Create
  * Arquivo    : 05_crud/cadastrar.php
+ * Autor      : Nicolas Henrique
+ * Descrição  : Cadastro de novos projetos.
  */
 
-// --- Proteção: apenas usuários autenticados ---
 require_once __DIR__ . '/../04_sessoes/includes/auth.php';
 requer_login();
 
-// --- Dependências ---
 require_once __DIR__ . '/includes/conexao.php';
 
 $erro = '';
-$sucesso = '';
 
-// Preserva os valores do formulário em caso de erro
 $form = [
     'nome'        => '',
     'descricao'   => '',
@@ -24,7 +22,6 @@ $form = [
     'ano'         => date('Y'),
 ];
 
-// --- Processamento do POST ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $form['nome']        = trim($_POST['nome'] ?? '');
@@ -39,17 +36,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erro = 'A descrição é obrigatória.';
     } elseif ($form['tecnologias'] === '') {
         $erro = 'Informe ao menos uma tecnologia.';
-    } elseif ($form['ano'] < 2000 || $form['ano'] > (int) date('Y') + 1) {
-        $erro = 'Ano inválido.';
     }
 
     if ($erro === '') {
+
         $pdo = conectar();
 
-        $sql = 'INSERT INTO projetos (nome, descricao, tecnologias, link_github, ano)
-                VALUES (:nome, :descricao, :tecnologias, :link_github, :ano)';
+        $sql = '
+            INSERT INTO projetos
+            (nome, descricao, tecnologias, link_github, ano)
+            VALUES
+            (:nome, :descricao, :tecnologias, :link_github, :ano)
+        ';
 
         $stmt = $pdo->prepare($sql);
+
         $stmt->execute([
             ':nome'        => $form['nome'],
             ':descricao'   => $form['descricao'],
@@ -63,179 +64,207 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$titulo_pagina = 'Cadastrar Projeto – Portfólio';
+$titulo_pagina = 'Cadastrar Projeto';
 $caminho_raiz  = '../';
 $pagina_atual  = '';
+$nome_dev      = 'NICOLAS';
+
+require_once __DIR__ . '/../includes/cabecalho.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <?php require_once __DIR__ . '/../includes/cabecalho.php'; ?>
-
 <style>
+    .form-page {
+        padding: 35px 0 60px;
+    }
 
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    .form-header {
+        margin-bottom: 28px;
+    }
 
-/* BODY */
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #eef2ff, #f3f4f6);
-    color: #111827;
-}
+    .form-header h1 {
+        color: #2563eb;
+        font-size: 2rem;
+        margin-bottom: 8px;
+    }
 
-/* CONTAINER */
-.container {
-    max-width: 650px;
-    margin: 50px auto;
-    padding: 20px;
-}
+    .form-header p {
+        color: #64748b;
+    }
 
-/* TÍTULO */
-.titulo-secao {
-    font-size: 26px;
-    color: #3b579d;
-    margin-bottom: 20px;
-    text-align: center;
-}
+    .btn-voltar-crud {
+        display: inline-block;
+        margin-bottom: 22px;
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 700;
+    }
 
-/* FORM CARD */
-.form-container {
-    background: #fff;
-    border-radius: 14px;
-    padding: 25px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    transition: 0.2s;
-}
+    .btn-voltar-crud:hover {
+        text-decoration: underline;
+    }
 
-.form-container:hover {
-    transform: translateY(-3px);
-}
+    .form-card {
+        max-width: 760px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    }
 
-/* LABEL */
-label {
-    font-size: 14px;
-    font-weight: bold;
-    display: block;
-    margin-top: 12px;
-    margin-bottom: 6px;
-}
+    .alerta-erro {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #ef4444;
+        padding: 14px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
 
-/* INPUTS */
-input, textarea {
-    width: 100%;
-    padding: 11px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-    transition: 0.2s;
-}
+    .form-group {
+        margin-bottom: 18px;
+    }
 
-/* FOCUS */
-input:focus, textarea:focus {
-    outline: none;
-    border-color: #3b579d;
-    box-shadow: 0 0 0 2px rgba(59,87,157,0.15);
-}
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 700;
+        color: #334155;
+    }
 
-/* BOTÃO */
-button {
-    width: 100%;
-    margin-top: 18px;
-    background: #3b579d;
-    color: white;
-    border: none;
-    padding: 12px;
-    font-size: 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.2s;
-}
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 13px 14px;
+        border-radius: 12px;
+        border: 1px solid #cbd5e1;
+        font-size: 0.95rem;
+        outline: none;
+    }
 
-button:hover {
-    background: #2f447a;
-    transform: scale(1.02);
-}
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+    }
 
-/* ALERTA ERRO */
-.alerta-erro {
-    background: #fee2e2;
-    border: 1px solid #ef4444;
-    color: #7f1d1d;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    text-align: center;
-}
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
 
-/* LINK */
-a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #3b579d;
-}
+    .btn-salvar {
+        width: 100%;
+        margin-top: 8px;
+        border: none;
+        border-radius: 14px;
+        padding: 14px;
+        background: #2563eb;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 1rem;
+        cursor: pointer;
+    }
 
-a:hover {
-    text-decoration: underline;
-}
+    .btn-salvar:hover {
+        background: #1d4ed8;
+    }
 
+    @media (max-width: 700px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
-</head>
-<body>
+<section class="form-page">
 
-<div class="container">
+    <a href="index.php" class="btn-voltar-crud">
+        ← Voltar para projetos
+    </a>
 
-    <h1 class="titulo-secao">➕ Cadastrar Novo Projeto 🚀</h1>
-
-    <?php if ($erro): ?>
-        <div class="alerta-erro">
-            <p>🚫 <?php echo htmlspecialchars($erro); ?></p>
-        </div>
-    <?php endif; ?>
-
-    <div class="form-container">
-        <form action="cadastrar.php" method="post">
-
-            <label>📌 Nome do Projeto *</label>
-            <input type="text" name="nome"
-                value="<?php echo htmlspecialchars($form['nome']); ?>"
-                placeholder="Ex: Sistema de Login">
-
-            <label>📝 Descrição *</label>
-            <textarea name="descricao" rows="4"
-                placeholder="Descreva o projeto..."><?php echo htmlspecialchars($form['descricao']); ?></textarea>
-
-            <label>🛠️ Tecnologias *</label>
-            <input type="text" name="tecnologias"
-                value="<?php echo htmlspecialchars($form['tecnologias']); ?>"
-                placeholder="PHP, MySQL, HTML...">
-
-            <label>🔗 GitHub (opcional)</label>
-            <input type="url" name="link_github"
-                value="<?php echo htmlspecialchars($form['link_github']); ?>"
-                placeholder="https://github.com/...">
-
-            <label>📅 Ano *</label>
-            <input type="number" name="ano"
-                value="<?php echo htmlspecialchars($form['ano']); ?>">
-
-            <button type="submit">💾 Salvar Projeto 🚀</button>
-
-        </form>
+    <div class="form-header">
+        <h1>➕ Novo Projeto</h1>
+        <p>Preencha os dados abaixo para cadastrar um projeto.</p>
     </div>
 
-    <p style="margin-top: 20px; text-align: center;">
-        <a href="index.php">⬅️ Voltar para projetos</a>
-    </p>
+    <div class="form-card">
 
-</div>
+        <?php if ($erro): ?>
+            <div class="alerta-erro">
+                🚫 <?= htmlspecialchars($erro) ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="cadastrar.php" method="post">
+
+            <div class="form-group">
+                <label for="nome">Nome do Projeto *</label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    value="<?= htmlspecialchars($form['nome']) ?>"
+                    placeholder="Ex: Sistema de Login"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="descricao">Descrição *</label>
+                <textarea
+                    id="descricao"
+                    name="descricao"
+                    rows="4"
+                    placeholder="Descreva brevemente o projeto..."
+                ><?= htmlspecialchars($form['descricao']) ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="tecnologias">Tecnologias *</label>
+                <input
+                    type="text"
+                    id="tecnologias"
+                    name="tecnologias"
+                    value="<?= htmlspecialchars($form['tecnologias']) ?>"
+                    placeholder="PHP, MySQL, CSS..."
+                >
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="link_github">GitHub opcional</label>
+                    <input
+                        type="url"
+                        id="link_github"
+                        name="link_github"
+                        value="<?= htmlspecialchars($form['link_github']) ?>"
+                        placeholder="https://github.com/..."
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="ano">Ano</label>
+                    <input
+                        type="number"
+                        id="ano"
+                        name="ano"
+                        value="<?= htmlspecialchars($form['ano']) ?>"
+                    >
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn-salvar">
+                💾 Salvar Projeto
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
 
 <?php require_once __DIR__ . '/../includes/rodape.php'; ?>
-</body>
-</html>

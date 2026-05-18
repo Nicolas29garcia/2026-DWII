@@ -1,194 +1,297 @@
 <?php
-/**
- * Disciplina : Desenvolvimento Web II (DWII)
- * Aula       : 07 — CRUD: Create e Read
- * Arquivo    : 05_crud/index.php
- */
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-// --- Proteção: apenas usuários autenticados ---
 require_once __DIR__ . '/../04_sessoes/includes/auth.php';
 requer_login();
 
-// --- Dependências ---
 require_once __DIR__ . '/includes/conexao.php';
 
-// --- Busca ---
 $pdo = conectar();
+
 $stmt = $pdo->query('SELECT * FROM projetos ORDER BY criado_em DESC');
-$projetos = $stmt->fetchAll();
+$projetos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$cadastroOk = isset($_GET['cadastro']) && $_GET['cadastro'] === 'ok';
+$mensagem = '';
+$tipoAlerta = 'sucesso';
 
-$titulo_pagina = 'Meus Projetos — Portfólio';
+if (isset($_GET['cadastro']) && $_GET['cadastro'] === 'ok') {
+    $mensagem = '✅ Projeto cadastrado com sucesso!';
+} elseif (isset($_GET['msg']) && $_GET['msg'] === 'editado') {
+    $mensagem = '✏️ Projeto atualizado com sucesso!';
+} elseif (isset($_GET['msg']) && $_GET['msg'] === 'excluido') {
+    $mensagem = '🗑️ Projeto removido com sucesso!';
+    $tipoAlerta = 'erro';
+}
+
+$titulo_pagina = 'Meus Projetos';
 $caminho_raiz  = '../';
 $pagina_atual  = '';
+$nome_dev      = 'NICOLAS';
+
+require_once __DIR__ . '/../includes/cabecalho.php';
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<?php require_once __DIR__ . '/../includes/cabecalho.php'; ?>
 
-<style>
+<div class="container" style="margin-top: 20px;">
 
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* BODY */
-body {
-    font-family: Arial, sans-serif;
-    background: #f3f4f6;
-    color: #111827;
-}
-
-/* CONTAINER */
-.container {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-/* TÍTULO */
-.titulo-secao {
-    font-size: 26px;
-    color: #3b579d;
-}
-
-/* CARD */
-.card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-    transition: 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-4px);
-}
-
-/* BOTÕES */
-.btn-primario {
-    background: #3b579d;
-    color: white;
-    padding: 10px 16px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.btn-primario:hover {
-    background: #2f447a;
-}
-
-.btn-secundario {
-    display: inline-block;
-    margin-top: 10px;
-    background: #e5e7eb;
-    color: #111827;
-    padding: 8px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 13px;
-}
-
-.btn-secundario:hover {
-    background: #d1d5db;
-}
-
-/* ALERTA */
-.alerta-sucesso {
-    background: #dcfce7;
-    border: 1px solid #22c55e;
-    color: #166534;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-/* GRID */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-/* RESPONSIVO */
-@media (max-width: 600px) {
-    .titulo-secao {
-        font-size: 20px;
-    }
-}
-
-</style>
-
-</head>
-<body>
-
-<div class="container">
-
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
-        <h1 class="titulo-secao">📂 Meus Projetos</h1>
-
-        <!-- ✅ CORRIGIDO AQUI -->
-        <a href="/05_crud/cadastrar.php" class="btn-primario">➕ Novo Projeto</a>
-    </div>
-
-    <?php if ($cadastroOk): ?>
-        <div class="alerta-sucesso">
-            <p style="margin: 0;">✅ Projeto cadastrado com sucesso!</p>
-        </div>
-    <?php endif; ?>
-
-    <?php if (empty($projetos)): ?>
-        <div class="card" style="text-align: center; padding: 40px 20px; color: #6b7280;">
-            <p style="font-size: 40px; margin: 0 0 12px;">📁</p>
-            <p style="font-size: 16px; margin: 0 0 16px;">Nenhum projeto cadastrado ainda.</p>
-
-            <!-- ✅ CORRIGIDO AQUI -->
-            <a href="/05_crud/cadastrar.php" class="btn-primario">➕ Cadastrar o primeiro projeto</a>
-        </div>
-
-    <?php else: ?>
-        <div class="grid">
-            <?php foreach ($projetos as $projeto): ?>
-                <div class="card">
-                    <h3 style="margin: 0 0 8px; color: #3b579d; font-size: 17px;">
-                        <?php echo htmlspecialchars($projeto['nome']); ?>
-                    </h3>
-                    
-                    <p style="margin: 0 0 10px; font-size: 14px; color: #374151; line-height: 1.6;">
-                        <?php echo htmlspecialchars($projeto['descricacao']); ?>
-                    </p>
-
-                    <p style="margin: 0 0 6px; font-size: 13px; color: #6b7280;">
-                        🛠️ <?php echo htmlspecialchars($projeto['tecnologias']); ?>
-                    </p>
-
-                    <p style="margin: 0 0 12px; font-size: 13px; color: #6b7280;">
-                        📅 <?php echo htmlspecialchars($projeto['ano']); ?>
-                    </p>
-
-                    <?php if ($projeto['link_github']): ?>
-                        <a href="<?php echo htmlspecialchars($projeto['link_github']); ?>" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           class="btn-secundario">🔗 Ver no GitHub</a>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-        </div>
-
-        <p style="margin-top: 16px; font-size: 14px; color: #6b7280; text-align: right;">
-            <?php echo count($projetos); ?> projeto(s) cadastrado(s)
-        </p>
-    <?php endif; ?>
+    <a href="../index.php" class="btn-voltar">
+        ← Voltar ao Hub
+    </a>
 
 </div>
 
+<header class="hub-header">
+
+    <div class="container">
+
+        <h1>Gerenciador de Projetos</h1>
+
+        <p class="tagline">
+            Módulo CRUD - Projetos
+        </p>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <!-- TOPO -->
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:15px;
+        flex-wrap:wrap;
+        margin-bottom:30px;
+    ">
+
+        <span class="badge-aula">
+
+            <?= count($projetos) ?> projeto(s)
+
+        </span>
+
+        <!-- BOTÃO CORRIGIDO -->
+        <a href="/02_projetoPHP-02_refatorado/05_crud/cadastrar.php"
+           class="btn">
+
+            ➕ Novo Projeto
+
+        </a>
+
+    </div>
+
+    <!-- ALERTAS -->
+    <?php if ($mensagem): ?>
+
+        <div style="
+            margin-bottom:30px;
+            padding:15px;
+            border-radius:12px;
+            text-align:center;
+            background:
+            <?= $tipoAlerta === 'sucesso'
+                ? 'rgba(34,197,94,0.1)'
+                : 'rgba(239,68,68,0.1)' ?>;
+
+            color:
+            <?= $tipoAlerta === 'sucesso'
+                ? '#16a34a'
+                : '#ef4444' ?>;
+        ">
+
+            <?= htmlspecialchars($mensagem) ?>
+
+        </div>
+
+    <?php endif; ?>
+
+    <!-- SEM PROJETOS -->
+    <?php if (empty($projetos)): ?>
+
+        <div class="card"
+             style="
+                text-align:center;
+                padding:60px;
+             ">
+
+            <span style="
+                font-size:3rem;
+                display:block;
+                margin-bottom:20px;
+            ">
+                📁
+            </span>
+
+            <h2>
+                Nenhum projeto encontrado
+            </h2>
+
+            <p style="
+                margin:15px 0 25px;
+            ">
+                Cadastre seu primeiro projeto.
+            </p>
+
+            <!-- BOTÃO CORRIGIDO -->
+            <a href="/02_projetoPHP-02_refatorado/05_crud/cadastrar.php"
+               class="btn">
+
+                ➕ Cadastrar Agora
+
+            </a>
+
+        </div>
+
+    <?php else: ?>
+
+        <!-- GRID -->
+        <div style="
+            display:grid;
+            grid-template-columns:
+            repeat(auto-fill,minmax(300px,1fr));
+            gap:20px;
+        ">
+
+            <?php foreach ($projetos as $projeto): ?>
+
+                <article class="card"
+                         style="
+                            display:flex;
+                            flex-direction:column;
+                            gap:12px;
+                         ">
+
+                    <!-- TOPO CARD -->
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                    ">
+
+                        <span style="font-size:1.6rem;">
+                            📝
+                        </span>
+
+                        <span class="badge-aula">
+
+                            <?= htmlspecialchars($projeto['ano'] ?? '') ?>
+
+                        </span>
+
+                    </div>
+
+                    <!-- NOME -->
+                    <h3>
+
+                        <?= htmlspecialchars($projeto['nome'] ?? '') ?>
+
+                    </h3>
+
+                    <!-- DESCRIÇÃO -->
+                    <p style="line-height:1.6;">
+
+                        <?= htmlspecialchars($projeto['descricao'] ?? '') ?>
+
+                    </p>
+
+                    <!-- TECNOLOGIAS -->
+                    <div style="
+                        display:flex;
+                        flex-wrap:wrap;
+                        gap:6px;
+                    ">
+
+                        <?php
+                        $tecs = explode(
+                            ',',
+                            $projeto['tecnologias'] ?? ''
+                        );
+
+                        foreach ($tecs as $tec):
+
+                            if (trim($tec) === '') {
+                                continue;
+                            }
+                        ?>
+
+                            <span class="tag">
+
+                                <?= htmlspecialchars(trim($tec)) ?>
+
+                            </span>
+
+                        <?php endforeach; ?>
+
+                    </div>
+
+                    <!-- AÇÕES -->
+                    <div style="
+                        margin-top:auto;
+                        display:flex;
+                        flex-direction:column;
+                        gap:10px;
+                    ">
+
+                        <?php if (!empty($projeto['link_github'])): ?>
+
+                            <a href="<?= htmlspecialchars($projeto['link_github']) ?>"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="btn">
+
+                                🔗 GitHub
+
+                            </a>
+
+                        <?php endif; ?>
+
+                        <div style="
+                            display:flex;
+                            gap:10px;
+                        ">
+
+                            <a href="detalhe.php?id=<?= urlencode($projeto['id']) ?>"
+                               class="btn"
+                               style="flex:1;">
+
+                                Ver Mais
+
+                            </a>
+
+                            <a href="editar.php?id=<?= urlencode($projeto['id']) ?>"
+                               class="btn"
+                               style="flex:1;">
+
+                                Editar
+
+                            </a>
+
+                        </div>
+
+                        <a href="excluir.php?id=<?= urlencode($projeto['id']) ?>"
+                           onclick="return confirm('Excluir projeto?');"
+                           class="btn"
+                           style="
+                                background:#ef4444;
+                                text-align:center;
+                           ">
+
+                            Excluir
+
+                        </a>
+
+                    </div>
+
+                </article>
+
+            <?php endforeach; ?>
+
+        </div>
+
+    <?php endif; ?>
+
+</main>
+
 <?php require_once __DIR__ . '/../includes/rodape.php'; ?>
-</body>
-</html>

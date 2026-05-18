@@ -1,204 +1,380 @@
 <?php
 /**
- * ════════════════════════════════════════════════════════════
+ * ============================================================
  * Disciplina : Desenvolvimento Web II (DWII)
- * Projeto    : System Hub (Central de Acesso aos Módulos)
- * Arquivo    : index.php (página principal / hub)
- * Autor      : Nicolas
- * Data       : [DATA DE HOJE]
- * Descrição  : Página inicial que centraliza o acesso aos módulos
- *              do curso. Lista dinamicamente os links com base
- *              em um array PHP, evitando repetição de código.
- * ════════════════════════════════════════════════════════════
+ * Projeto    : Central de Projetos Web
+ * Arquivo    : index.php
+ * Autor      : Nicolas Henrique
+ * Descrição  : Página inicial com acesso aos módulos do projeto.
+ * ============================================================
  */
 
-// ── Variáveis principais ────────────────────────────────────
-// $base_url → evita erros de caminho (404)
-// Garante que os links funcionem mesmo mudando de pasta
-$base_url = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\') . '/';
+if (session_status() === PHP_SESSION_NONE){
+    session_start();
+}
 
-// Dados exibidos no topo da página
-$usuario = "Nicolas";
-$projeto = "Desenvolvimento Web II // 2026";
+// ── Dados principais ───────────────────────────────────────
+$usuario = "Nicolas Henrique";
 
-// ── Estrutura de dados (módulos) ────────────────────────────
-// Cada item representa um "card" da interface
-// Para adicionar novos módulos, basta inserir aqui
+$projeto = "Desenvolvimento Web II • 2026";
+
+// ── Módulos do sistema ─────────────────────────────────────
 $modulos = [
+
     [
-        "id" => "00", 
-        "titulo" => "Apresentação Pessoal", 
-        "tag" => "HTML/CSS", 
-        "arquivo" => "00_apresentacao/index.html"
+        "id" => "01",
+        "titulo" => "Sobre Mim",
+        "tag" => "PHP",
+        "arquivo" => "./sobre.php"
     ],
+
     [
-        "id" => "01", 
-        "titulo" => "Portfólio Dinâmico", 
-        "tag" => "PHP Intro", 
-        "arquivo" => "01_php-intro/index.php"
+        "id" => "02",
+        "titulo" => "Contato",
+        "tag" => "Formulários",
+        "arquivo" => "./contato.php"
     ],
+
     [
-        "id" => "04", 
-        "titulo" => "Formulários e Filtros", 
-        "tag" => "Segurança", 
-        "arquivo" => "02_formularios/contato.php"
+        "id" => "03",
+        "titulo" => "Catálogo PDO",
+        "tag" => "Banco de Dados",
+        "arquivo" => "./catalogo.php"
     ],
+
     [
-        "id" => "05", 
-        "titulo" => "Integração com Banco", 
-        "tag" => "Database", 
-        "arquivo" => "03_pdo/index.php"
+        "id" => "04",
+        "titulo" => "Sistema Login",
+        "tag" => "Sessões",
+        "arquivo" => "./04_sessoes/login.php"
     ],
+
+    // ── CRUD protegido por login ─────────────────────────
     [
-        "id" => "06", 
-        "titulo" => "Gestão de Sessões", 
-        "tag" => "Auth", 
-        "arquivo" => "04_sessoes/login.php"
-    ],
-    [
-        "id" => "07", 
-        "titulo" => "Crud", 
-        "tag" => "Auth", 
-        "arquivo" => "05_crud/index.php"
+        "id" => "05",
+        "titulo" => "CRUD Projetos",
+        "tag" => "CRUD",
+        "arquivo" => "./04_sessoes/login.php"
     ]
+
 ];
+
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <!-- Configurações básicas da página -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Título da aba -->
-    <title>Hub // <?= $usuario ?></title>
+<meta charset="UTF-8">
 
-    <!-- Fonte externa (Google Fonts) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <style>
-        /* ── Variáveis CSS (tema) ───────────────────────── */
-        :root {
-            --primary: #10b981;
-            --bg: #f1f5f9;
-            --text: #0f172a;
-            --border: #e2e8f0;
-        }
+<title>
+    Hub - <?= htmlspecialchars($usuario) ?>
+</title>
 
-        /* Reset básico */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet">
 
-        /* Corpo da página */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            padding: 40px 20px;
-        }
+<style>
 
-        /* Container central */
-        .wrapper { max-width: 600px; margin: 0 auto; }
+:root{
+    --primary:#2563eb;
+    --secondary:#0ea5e9;
+    --bg:#f1f5f9;
+    --dark:#0f172a;
+    --border:#cbd5e1;
+}
 
-        /* ── Cabeçalho ─────────────────────────────────── */
-        header {
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border);
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
-        header p { color: #64748b; font-weight: 500; }
+body{
 
-        /* Lista de módulos */
-        .lista { display: grid; gap: 15px; }
+    font-family:'Inter', sans-serif;
 
-        /* Card de cada módulo */
-        .card {
-            background: #fff;
-            border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.2s ease;
-        }
+    background:
+    linear-gradient(
+        135deg,
+        #e0f2fe,
+        #f8fafc
+    );
 
-        /* Efeito ao passar o mouse */
-        .card:hover {
-            border-color: var(--primary);
-            transform: translateX(8px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        }
+    min-height:100vh;
 
-        /* Badge da aula */
-        .badge {
-            font-size: 0.65rem;
-            font-weight: 800;
-            background: #ecfdf5;
-            color: var(--primary);
-            padding: 4px 8px;
-            border-radius: 6px;
-            text-transform: uppercase;
-        }
+    padding:50px 20px;
 
-        .card h3 { margin: 5px 0; font-size: 1.1rem; }
+    color:var(--dark);
+}
 
-        /* Tag (categoria) */
-        .tag { font-size: 0.8rem; color: #94a3b8; font-family: monospace; }
+.wrapper{
 
-        /* Seta animada */
-        .seta { font-weight: bold; color: var(--primary); opacity: 0; transition: 0.2s; }
-        .card:hover .seta { opacity: 1; }
+    max-width:760px;
 
-        /* Rodapé */
-        footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-    </style>
+    margin:auto;
+}
+
+/* ───────────────────────────────────────────────────────
+   Cabeçalho
+─────────────────────────────────────────────────────── */
+
+header{
+
+    text-align:center;
+
+    margin-bottom:45px;
+}
+
+header h1{
+
+    font-size:3rem;
+
+    font-weight:800;
+
+    margin-bottom:10px;
+
+    color:#0f172a;
+}
+
+header p{
+
+    color:#475569;
+
+    font-size:1.05rem;
+}
+
+/* ───────────────────────────────────────────────────────
+   Lista módulos
+─────────────────────────────────────────────────────── */
+
+.lista{
+
+    display:grid;
+
+    gap:18px;
+}
+
+/* ───────────────────────────────────────────────────────
+   Card módulo
+─────────────────────────────────────────────────────── */
+
+.card{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:24px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    text-decoration:none;
+
+    color:inherit;
+
+    transition:0.3s;
+
+    box-shadow:
+    0 5px 15px rgba(0,0,0,0.05);
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:var(--primary);
+
+    box-shadow:
+    0 12px 25px rgba(37,99,235,0.15);
+}
+
+/* ───────────────────────────────────────────────────────
+   Badge aula
+─────────────────────────────────────────────────────── */
+
+.badge{
+
+    display:inline-block;
+
+    background:#dbeafe;
+
+    color:var(--primary);
+
+    padding:5px 10px;
+
+    border-radius:8px;
+
+    font-size:0.72rem;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+}
+
+/* ───────────────────────────────────────────────────────
+   Título módulo
+─────────────────────────────────────────────────────── */
+
+.card h3{
+
+    font-size:1.25rem;
+
+    margin-bottom:6px;
+}
+
+/* ───────────────────────────────────────────────────────
+   Tag módulo
+─────────────────────────────────────────────────────── */
+
+.tag{
+
+    color:#64748b;
+
+    font-size:0.9rem;
+}
+
+/* ───────────────────────────────────────────────────────
+   Texto acessar
+─────────────────────────────────────────────────────── */
+
+.seta{
+
+    color:var(--primary);
+
+    font-size:1rem;
+
+    font-weight:bold;
+
+    transition:0.3s;
+}
+
+.card:hover .seta{
+
+    transform:translateX(5px);
+}
+
+/* ───────────────────────────────────────────────────────
+   Rodapé
+─────────────────────────────────────────────────────── */
+
+footer{
+
+    text-align:center;
+
+    margin-top:50px;
+
+    color:#64748b;
+
+    font-size:0.9rem;
+}
+
+/* ───────────────────────────────────────────────────────
+   Responsivo
+─────────────────────────────────────────────────────── */
+
+@media(max-width:768px){
+
+    header h1{
+
+        font-size:2.2rem;
+    }
+
+    .card{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+    }
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <div class="wrapper">
+<div class="wrapper">
 
-        <!-- ── Cabeçalho da página ───────────────────── -->
-        <header>
-            <h1><?= $usuario ?></h1>
-            <p><?= $projeto ?></p>
-        </header>
+    <!-- ── Cabeçalho ─────────────────────────────────── -->
 
-        <!-- ── Lista dinâmica de módulos ─────────────── -->
-        <nav class="lista">
-            <?php foreach ($modulos as $m): ?>
-            <a href="<?= $base_url . $m['arquivo'] ?>" class="card">
+    <header>
+
+        <h1>
+            <?= htmlspecialchars($usuario) ?>
+        </h1>
+
+        <p>
+            <?= htmlspecialchars($projeto) ?>
+        </p>
+
+    </header>
+
+    <!-- ── Lista módulos ─────────────────────────────── -->
+
+    <nav class="lista">
+
+        <?php foreach($modulos as $m): ?>
+
+            <a href="<?= $m['arquivo'] ?>"
+               class="card">
+
                 <div>
-                    <span class="badge">Aula <?= $m['id'] ?></span>
 
-                    <?php
-                    // htmlspecialchars protege contra XSS
-                    ?>
-                    <h3><?= htmlspecialchars($m['titulo']) ?></h3>
+                    <span class="badge">
 
-                    <span class="tag">#<?= $m['tag'] ?></span>
+                        Aula <?= $m['id'] ?>
+
+                    </span>
+
+                    <h3>
+
+                        <?= htmlspecialchars($m['titulo']) ?>
+
+                    </h3>
+
+                    <span class="tag">
+
+                        #<?= htmlspecialchars($m['tag']) ?>
+
+                    </span>
+
                 </div>
 
-                <div class="seta">ABRIR →</div>
+                <div class="seta">
+
+                    ACESSAR →
+
+                </div>
+
             </a>
-            <?php endforeach; ?>
-        </nav>
 
-        <!-- ── Rodapé ───────────────────────────────── -->
-        <footer>
-            IFPR - Campus Ponta Grossa | <?= date("Y") ?>
-        </footer>
+        <?php endforeach; ?>
 
-    </div>
+    </nav>
+
+    <!-- ── Rodapé ────────────────────────────────────── -->
+
+    <footer>
+
+        IFPR • Campus Ponta Grossa • <?= date("Y") ?>
+
+    </footer>
+
+</div>
 
 </body>
 </html>
